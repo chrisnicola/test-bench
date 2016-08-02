@@ -14,8 +14,10 @@ module TestBench
       telemetry.asserted
     end
 
-    def context prose=nil, suppress_exit: nil, &block
+    def context prose=nil, suppress_exit: nil, line_number: nil, &block
       suppress_exit ||= false
+
+      @line_number = line_number if line_number
 
       telemetry = Telemetry::Registry.get binding
       settings = Settings::Registry.get binding
@@ -32,6 +34,7 @@ module TestBench
         Structure.error error, binding
 
       ensure
+        @test_instance = nil
         nesting = telemetry.context_exited prose
 
         if nesting.zero? and telemetry.failed?
@@ -45,6 +48,7 @@ module TestBench
     end
 
     def test prose=nil, &block
+      return if @line_number && @line_number != block.source_location[1]
       telemetry = Telemetry::Registry.get binding
 
       prose ||= 'Test'

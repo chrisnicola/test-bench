@@ -5,6 +5,7 @@ module TestBench
     attr_writer :writer
     attr_writer :record_telemetry
     attr_writer :reverse_backtraces
+    attr_accessor :line_number
 
     def abort_on_error
       nil_coalesce :@abort_on_error, Defaults.abort_on_error

@@ -98,4 +98,20 @@ context "Settings" do
       assert settings.record_telemetry == false
     end
   end
+
+  context "Line number" do
+    test do
+      settings = TestBench::Settings.new
+
+      settings.line_number = 10
+
+      assert settings.line_number == 10
+    end
+
+    test "Default is nil" do
+      settings = TestBench::Settings.new
+
+      assert settings.line_number.nil?
+    end
+  end
 end

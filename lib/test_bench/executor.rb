@@ -2,16 +2,19 @@ module TestBench
   class Executor
     attr_reader :binding
     attr_reader :file_module
+    attr_reader :line_number
 
-    def initialize binding, file_module
+    def initialize binding, file_module, line_number = nil
       @binding = binding
       @file_module = file_module
+      @line_number = line_number
     end
 
     def self.build
       binding = TOPLEVEL_BINDING
+      line_number = Settings.toplevel.line_number
 
-      new binding, File
+      new binding, File, line_number
     end
 
     def call files
@@ -28,7 +31,7 @@ module TestBench
       telemetry.file_started file
 
       begin
-        binding.receiver.context :suppress_exit => true do
+        binding.receiver.context :suppress_exit => true, :line_number => line_number do
           binding.eval test_script, file
         end
 
