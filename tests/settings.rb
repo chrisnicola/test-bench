@@ -108,6 +108,30 @@ context "Settings" do
       assert settings.line_number == 10
     end
 
+    test "Will convert a string" do
+      settings = TestBench::Settings.new
+
+      settings.line_number = "10"
+
+      assert settings.line_number == 10
+    end
+
+    test "Will be nil on an invalid string" do
+      settings = TestBench::Settings.new
+
+      settings.line_number = "bad value"
+
+      assert settings.line_number.nil?
+    end
+
+    test "Will be nil on a negative number" do
+      settings = TestBench::Settings.new
+
+      settings.line_number = -10
+
+      assert settings.line_number.nil?
+    end
+
     test "Default is nil" do
       settings = TestBench::Settings.new
 

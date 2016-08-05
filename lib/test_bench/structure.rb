@@ -14,10 +14,8 @@ module TestBench
       telemetry.asserted
     end
 
-    def context prose=nil, suppress_exit: nil, line_number: nil, &block
+    def context prose=nil, suppress_exit: nil, &block
       suppress_exit ||= false
-
-      @line_number = line_number if line_number
 
       telemetry = Telemetry::Registry.get binding
       settings = Settings::Registry.get binding
@@ -48,8 +46,11 @@ module TestBench
     end
 
     def test prose=nil, &block
-      return if @line_number && @line_number != block.source_location[1]
       telemetry = Telemetry::Registry.get binding
+      settings = Settings::Registry.get binding
+      line_number = settings.line_number
+      require 'pry'
+      return if line_number && line_number != block.source_location[1]
 
       prose ||= 'Test'
 

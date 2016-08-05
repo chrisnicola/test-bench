@@ -20,6 +20,11 @@ module TestBench
 
       paths = argv
       paths << 'tests' if paths.empty?
+      if paths.length == 1
+        path, line_number = paths[0].split(':')
+        settings.line_number = line_number
+        paths = [path]
+      end
 
       current_directory = File.expand_path Dir.pwd
 
@@ -74,10 +79,6 @@ If no paths are specified, #{program_name} runs all files in ./tests. The follow
 
         parser.on '-x', '--exclude PATTERN', %{Filter out files matching PATTERN (Default is "_init$")} do |pattern|
           settings.exclude_pattern = pattern
-        end
-
-        parser.on '-l', '--line N', "Run a single test at the N-th line" do |n|
-          settings.line_number = n.to_i
         end
       end
     end
